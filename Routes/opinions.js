@@ -1,8 +1,6 @@
 const express = require("express");
 const  fs  = require("fs");
 const jwt = require("jsonwebtoken");
-const momment = require("moment");
-
 const app = express();
 const connection = require("../Database/database");
 
@@ -10,7 +8,7 @@ app.get("/opinion/List", (req, res) => {
     connection.query(
       "select * from opinionAnonym",
       (err, results) => {
-        if (err) throw ('No hay conexion a base de datos');
+        if (err) throw (err);
         res.send(results);
       }
     );
@@ -27,39 +25,27 @@ app.get("/opinion/:id/Details", (req, res) => {
   });
   
   app.post("/opinion/add/", verifyToken, (req, res) => {
-    
+
     jwt.verify(req.token, 'secretkey1', (error) => {
         if(error){
           res.send('Complete el token de manera correcta')
-            res.sendStatus(403);
         }else{
-            const {opinion} = req.body
-
-              if (opinion!== ""){
-            connection.query("INSERT INTO opinionAnonym set ?", opinion ,(err) => {
+            const setOpinion = 
+            {opinion: req.body.opinion}
+          if(req.body.opinion !== ""){
+            connection.query("INSERT INTO opinionAnonym  set ?", [setOpinion] ,(err) => {
                 if (err) {
                     console.log(err);
                     res.send('Ingrese los campos de forma correcta')
+                }else{
+                  jwt.sign({setOpinion}, 'secretkey2', (err, token) => {
+                  res.json({ token })  })
                 }
-                    })
-                    //Creando token 2 para editar opiniones
-                    jwt.sign({opinion}, 'secretkey2', (err, token) => {
-                      res.json({
-                          token
-                      })
-                  })
+              })
         }else{
-
-          console.log("Campo vacio")
-          var now = new Date();
-
-          var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes()
-          fs.writeFile( logfile_name +'.txt', 'Error: "Campo vacio" - Tratando de agregar una opinion' , (error) =>{
-            console.log(logfile_name)
-          })
-          
+          Errorfilegenerator('Campo vacio', "Tratando de agregar una opinion")
         }}})
-    
+
   })
   app.post("/opinion/update/:id", verifyToken, (req, res) => {
 
@@ -68,8 +54,9 @@ app.get("/opinion/:id/Details", (req, res) => {
         res.send('Complete el token de manera correcta')
           res.sendStatus(403);
       }else{
-                const{ id } = req.params;
+      const{ id } = req.params;
       const { opinion } = req.body
+      if (opinion!== ""){
        connection.query(`UPDATE opinionAnonym set opinion = '${opinion}' WHERE opinion_id = ${id}` ,(err) => {
         if (err) {
             console.log(err);
@@ -80,16 +67,26 @@ app.get("/opinion/:id/Details", (req, res) => {
               message: "Opinion editada correctamente",
               code: 200,})
               }   })
+            }else{  
+              Errorfilegenerator('Campo vacio', "Tratando de editar una opinion")
+              console.log("Campo vacio")
             }
+          }
         })
     })
     
-    app.delete("/opinion/delete/:id", async (req, res) => {
-      const{ id } = req.params;
-       await connection.query(`DELETE FROM opinionAnonym WHERE opinion_id = ${id}` ,(err) => {
+    app.delete("/opinion/delete/:id", verifyToken, (req, res) => {
+      jwt.verify(req.token, 'secretkey2', (error) => {
+        if(error){
+          res.send('Complete el token de manera correcta')
+        }else{
+
+        const{ id } = req.params;
+        connection.query(`DELETE FROM opinionAnonym WHERE opinion_id = ${id}` ,(err) => {
         if (err) {
             console.log(err);
             res.send('Inserte un id existente o de forma correcta')
+            Errorfilegenerator("id insertado de forma errorea", "Tratando de eliminar una opinion")
         }
         else {
             res.send({
@@ -97,6 +94,8 @@ app.get("/opinion/:id/Details", (req, res) => {
               code: 200,})
              }
           })
+        }
+      })
     })
 
   // Funcion de verificar token
@@ -108,10 +107,17 @@ app.get("/opinion/:id/Details", (req, res) => {
            req.token = bearerToken;
            next();
       }else{
-          res.sendStatus(403);
-          res.send('Ingrese el token de forma correcta')
+          res.send('Token sin ingresar o ingresado de forma correcta')
       }
  }
-  
+ //Generados de archivos de errores
+  function Errorfilegenerator(error,Endpoint){
+    var now = new Date();
+
+    var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes()
+    fs.writeFile( logfile_name +'.txt', error + '\n- '+ Endpoint , (error) =>{
+      console.log(logfile_name)
+    })
+  }
   module.exports = app;
   
