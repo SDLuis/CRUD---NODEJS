@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const jwt = require("jsonwebtoken");
 
 const app = express();
@@ -20,6 +21,7 @@ app.post("/register", async (req, res) => {
         //Creando token 1 para dar paso a agregar opinion
         jwt.sign({newRegister}, 'secretkey1', (err, token) => {
             res.json({ token })
+            datatimetokenregister('Token 1 - Registro de usuario')
           res.send({
               message: "Registrado correctamente",
               code: 200,}) 
@@ -28,7 +30,19 @@ app.post("/register", async (req, res) => {
           })
   })
 
- 
+  //Funcion que agrega registro de las fechas de solicitud de tokens
 
+  function datatimetokenregister(numbertoken){
+
+    var now = new Date();
+    var logfile = now.getFullYear() + "/"+ now.getMonth() + "/" + now.getDate() + "-" + now.getHours() + ":" + now.getMinutes()
+
+    fs.appendFile('Registro.txt', '\n'+ logfile +'   -   '+ numbertoken ,(error) =>{
+
+    if(!error){ console.log('Registro agregado') }
+    else{console.log(`Error: ${error}`);}
+    })
+  }
+ 
 
 module.exports = app;

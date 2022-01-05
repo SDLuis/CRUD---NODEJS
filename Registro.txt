@@ -1,0 +1,5 @@
+
+
+2022/0/5-15:42   -   Token 1 - Registro de usuario
+2022/0/5-15:44   -   Token 2 - Agregando opinion
+2022/0/5-15:47   -   Token 2 - Agregando opinion

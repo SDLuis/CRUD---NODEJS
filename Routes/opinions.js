@@ -39,7 +39,9 @@ app.get("/opinion/:id/Details", (req, res) => {
                     res.send('Ingrese los campos de forma correcta')
                 }else{
                   jwt.sign({setOpinion}, 'secretkey2', (err, token) => {
-                  res.json({ token })  })
+                  res.json({ token })  
+                  datatimetokenregister('Token 2 - Agregando opinion')
+                })
                 }
               })
         }else{
@@ -111,12 +113,25 @@ app.get("/opinion/:id/Details", (req, res) => {
       }
  }
  //Generados de archivos de errores
-  function Errorfilegenerator(error,Endpoint){
+function Errorfilegenerator(error,Endpoint){
     var now = new Date();
 
     var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes()
     fs.writeFile( logfile_name +'.txt', error + '\n- '+ Endpoint , (error) =>{
       console.log(logfile_name)
+    })
+  }
+//Funcion que agrega registro de las fechas de solicitud de tokens
+
+  function datatimetokenregister(numbertoken){
+
+    var now = new Date();
+    var logfile = now.getFullYear() + "/"+ now.getUTCMonth() + "/" + now.getDate() + "-" + now.getHours() + ":" + now.getMinutes()
+
+    fs.appendFile('Registro.txt', '\n'+ logfile +'   -   '+ numbertoken ,(error) =>{
+
+    if(!error){ console.log('Registro agregado') }
+    else{console.log(`Error: ${error}`);}
     })
   }
   module.exports = app;
