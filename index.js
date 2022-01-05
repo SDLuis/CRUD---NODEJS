@@ -13,7 +13,7 @@ app.use(require("./Routes/users"))
 app.use(require("./Routes/register"))
 
 
-app.get('/' , (req , res) =>{
+app.get('/HOME' , (req , res) =>{
     res.send('WELCOME :)'+ '\n Ve a register "/Register" para continuar')
 })
 app.listen(app.get('port'), ()=>{
