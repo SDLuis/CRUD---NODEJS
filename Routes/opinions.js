@@ -1,5 +1,7 @@
 const express = require("express");
+const  fs  = require("fs");
 const jwt = require("jsonwebtoken");
+const momment = require("moment");
 
 const app = express();
 const connection = require("../Database/database");
@@ -31,22 +33,32 @@ app.get("/opinion/:id/Details", (req, res) => {
           res.send('Complete el token de manera correcta')
             res.sendStatus(403);
         }else{
-            const newOpinion = {
-                opinion: req.body.opinion
-              };
-            connection.query("INSERT INTO opinionAnonym set ?", [newOpinion] ,(err) => {
+            const {opinion} = req.body
+
+              if (opinion!== ""){
+            connection.query("INSERT INTO opinionAnonym set ?", opinion ,(err) => {
                 if (err) {
                     console.log(err);
                     res.send('Ingrese los campos de forma correcta')
                 }
                     })
                     //Creando token 2 para editar opiniones
-                    jwt.sign({newOpinion}, 'secretkey2', (err, token) => {
+                    jwt.sign({opinion}, 'secretkey2', (err, token) => {
                       res.json({
                           token
                       })
                   })
-        }})
+        }else{
+
+          console.log("Campo vacio")
+          const dtime = momment().format("YYYY-MM-DD HH:mm:ss")
+          var now = new Date();
+          var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes() +'.txt'
+          fs.writeFile( logfile_name +'.json', JSON.stringify( { Error: "Campo vacio" }), (error) =>{
+            console.log(logfile_name)
+          })
+          
+        }}})
     
   })
   app.post("/opinion/update/:id", verifyToken, (req, res) => {
@@ -71,7 +83,6 @@ app.get("/opinion/:id/Details", (req, res) => {
             }
         })
     })
-
     app.delete("/opinion/delete/:id", async (req, res) => {
       const{ id } = req.params;
        await connection.query(`DELETE FROM opinionAnonym WHERE opinion_id = ${id}` ,(err) => {
