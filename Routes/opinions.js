@@ -51,10 +51,10 @@ app.get("/opinion/:id/Details", (req, res) => {
         }else{
 
           console.log("Campo vacio")
-          const dtime = momment().format("YYYY-MM-DD HH:mm:ss")
           var now = new Date();
-          var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes() +'.txt'
-          fs.writeFile( logfile_name +'.json', JSON.stringify( { Error: "Campo vacio" }), (error) =>{
+
+          var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes()
+          fs.writeFile( logfile_name +'.txt', 'Error: "Campo vacio" - Tratando de agregar una opinion' , (error) =>{
             console.log(logfile_name)
           })
           
@@ -83,6 +83,7 @@ app.get("/opinion/:id/Details", (req, res) => {
             }
         })
     })
+    
     app.delete("/opinion/delete/:id", async (req, res) => {
       const{ id } = req.params;
        await connection.query(`DELETE FROM opinionAnonym WHERE opinion_id = ${id}` ,(err) => {
