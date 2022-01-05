@@ -14,7 +14,7 @@ app.use(require("./Routes/register"))
 
 
 app.get('/' , (req , res) =>{
-    res.send('U r Online :)')
+    res.send('WELCOME :)'+ '\n Ve a register "/Register" para continuar')
 })
 app.listen(app.get('port'), ()=>{
     console.log('Server running on port', app.get('port'))

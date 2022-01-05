@@ -4,24 +4,38 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const connection = require("../Database/database");
 
-app.get("/opinion/List", (req, res) => {
+app.get("/opinion/List", verifyToken, (req, res) => {
+
+  jwt.verify(req.token, 'secretkey1', (error) => {
+
+    if(error){
+      res.send('Complete el token de manera correcta')
+    }else{
+
     connection.query(
       "select * from opinionAnonym",
       (err, results) => {
         if (err) throw (err);
         res.send(results);
-      }
-    );
+      });
+    }})
   });
 
-app.get("/opinion/:id/Details", (req, res) => {
+app.get("/opinion/:id/Details", verifyToken, (req, res) => {
+
+  jwt.verify(req.token, 'secretkey1', (error) => {
+
+    if(error){
+      res.send('Complete el token de manera correcta')
+    }else{
+
     connection.query(
       `select * from opinionAnonym where opinion_id = ${req.params.id}`,
       (err, results) => {
         if (err) throw ('Ingrese un id correcto');
         res.send(results);
-      }
-    );
+      });
+    }})
   });
   
   app.post("/opinion/add/", verifyToken, (req, res) => {
