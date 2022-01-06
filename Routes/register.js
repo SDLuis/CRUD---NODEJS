@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 const connection = require("../Database/database");
-
+//Endpoint para registrar usuarios
 app.post("/register", async (req, res) => {
     const newRegister = {
       fname_user: req.body.fname_user,

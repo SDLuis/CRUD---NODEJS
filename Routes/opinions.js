@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const connection = require("../Database/database");
 
+//Endpoint para filtrar todas las opiniones
 app.get("/opinion/List", verifyToken, (req, res) => {
 
   jwt.verify(req.token, 'secretkey1', (error) => {
@@ -23,6 +24,7 @@ app.get("/opinion/List", verifyToken, (req, res) => {
     }})
   });
 
+//Endpoint para filtrar las opiniones por id
 app.get("/opinion/:id/Details", verifyToken, (req, res) => {
 
   jwt.verify(req.token, 'secretkey1', (error) => {
@@ -42,6 +44,7 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
     }})
   });
   
+  //Endpoint para agregar opiniones
   app.post("/opinion/add/", verifyToken, (req, res) => {
 
     jwt.verify(req.token, 'secretkey1', (error) => {
@@ -65,9 +68,12 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
               })
         }else{
           Errorfilegenerator('Campo vacio', "Tratando de agregar una opinion")
-        }}})
+        }
+      }
+    })
+  });
 
-  })
+  //Endpoint para modificar opiniones por id
   app.post("/opinion/update/:id", verifyToken, (req, res) => {
 
     jwt.verify(req.token, 'secretkey2', (error) => {
@@ -96,6 +102,7 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
         })
     })
     
+    //Endpoint para eliminar opiniones por id
     app.delete("/opinion/delete/:id", verifyToken, (req, res) => {
       jwt.verify(req.token, 'secretkey2', (error) => {
         if(error){

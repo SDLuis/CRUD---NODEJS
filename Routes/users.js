@@ -5,7 +5,7 @@ const fs = require("fs");
 const app = express();
 const connection = require("../Database/database");
 
-// see users
+// Endpoint para filtrar todo los usuarios
 app.get("/users",verifyToken, (req, res) => {
 
   jwt.verify(req.token, 'secretkey1', (error) => {
