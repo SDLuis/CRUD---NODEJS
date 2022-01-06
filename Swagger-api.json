@@ -1,0 +1,308 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Api de Foro.",
+    "description": "Un modo de foro anonimo.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Home",
+      "description": "Ruta base"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "Home"
+        ],
+        "summary": "Ruta inicial al entrar al proyecto.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokenf"
+          }
+        ],
+        "resposes": {
+          "200": {
+            "description": "WELCOME - U RE ONLINE"
+          },
+          "500": {
+            "description": "SERVER ERROR."
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "summary": "Ruta para registrarse.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokenf"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schemas": {
+                "$ref": "#/components/schemas/bodyclientadd"
+              }
+            }
+          }
+        },
+        "resposes": {
+          "200": {
+            "description": "WELCOME - U RE LOGED"
+          },
+          "400": {
+            "description": "BAD REQUEST."
+          }
+        }
+      }
+    },
+    "/opinion/add": {
+      "post": {
+        "tags": [
+          "Opinions"
+        ],
+        "summary": "Ruta para agregar una opinion.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schemas": {
+                "$ref": "#/components/schemas/bodyopiniontadd"
+              }
+            }
+          }
+        },
+        "resposes": {
+          "200": {
+            "description": "OPINION ADDED!!"
+          },
+          "403": {
+            "description": "FORBIDDEN"
+          }
+        }
+      }
+    },
+    "/opinion/list": {
+      "get": {
+        "tags": [
+          "Opinions"
+        ],
+        "summary": "Ruta para filtar todas opiniones.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "resposes": {
+          "200": {
+            "description": "OPINIONS FILTERS!!"
+          },
+          "403": {
+            "description": "FORBIDDEN"
+          }
+        }
+      }
+    },
+    "/opinion/id/details": {
+      "get": {
+        "tags": [
+          "Opinions"
+        ],
+        "summary": "Ruta para filtar opiniones.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schemas": {
+                "$ref": "#/components/schemas/bodyopiniontfilter"
+              }
+            }
+          }
+        },
+        "resposes": {
+          "200": {
+            "description": "OPINION FILTER!!"
+          },
+          "403": {
+            "description": "FORBIDDEN!!"
+          }
+        }
+      }
+    },
+    "/opinion/update/id": {
+      "put": {
+        "tags": [
+          "Opinions"
+        ],
+        "summary": "Ruta para editar opiniones.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schemas": {
+                "$ref": "#/components/schemas/bodyclientedit"
+              }
+            }
+          }
+        },
+        "resposes": {
+          "200": {
+            "description": "OPINION UPDATED!!"
+          },
+          "403": {
+            "description": "FORBIDDEN!!"
+          }
+        }
+      }
+    },
+    "/opinion/delete/id": {
+      "delete": {
+        "tags": [
+          "Opinions"
+        ],
+        "summary": "Ruta para eliminar opiniones.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schemas": {
+                "$ref": "#/components/schemas/bodyopiniontdelete"
+              }
+            }
+          }
+        },
+        "resposes": {
+          "200": {
+            "description": "OPINION DELETE!!"
+          },
+          "403": {
+            "description": "FORBIDDEN!!"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Ruta para filtar todos los usuarios.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/tokent"
+          }
+        ],
+        "resposes": {
+          "200": {
+            "description": "USERS FILTERS!!"
+          },
+          "500": {
+            "description": "SERVER ERROR!!"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": null,
+    "parameters": {
+      "tokenf": {
+        "in": "header",
+        "description": "Token de autentificacion",
+        "required": false
+      },
+      "tokent": {
+        "in": "header",
+        "description": "Token de autentificacion",
+        "required": true
+      }
+    },
+    "schemas": {
+      "bodyopiniontadd": {
+        "type": "object",
+        "properties": {
+          "opinion": {
+            "type": "string",
+            "description": "Opinion"
+          }
+        }
+      },
+      "bodyopiniontfilter": {
+        "type": "object",
+        "properties": {
+          "opinion": {
+            "type": "number",
+            "description": "ID de la Opinion"
+          }
+        }
+      },
+      "bodyclientedit": {
+        "type": "object",
+        "properties": {
+          "opinion_id": {
+            "type": "number",
+            "description": "ID de la opinion"
+          },
+          "opinion": {
+            "type": "string",
+            "description": "La opinion por la que quiera modificar la anterior"
+          }
+        }
+      },
+      "bodyclientdelete": {
+        "type": "object",
+        "properties": {
+          "opinion_id": {
+            "type": "number",
+            "description": "ID de la opinion"
+          }
+        }
+      },
+      "bodyclientadd": {
+        "type": "object",
+        "properties": {
+          "fname_user": {
+            "type": "string",
+            "description": "Primer nombre del cliente"
+          },
+          "lname_user": {
+            "type": "string",
+            "description": "Ultimo nombre del cliente"
+          },
+          "age_user": {
+            "type": "number",
+            "description": "Edad del cliente"
+          }
+        }
+      }
+    }
+  }
+}

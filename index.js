@@ -7,14 +7,15 @@ app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.listen(5000, ()=>{
-console.log('Server running on port')
-} ) 
+app.set('port', process.env.PORT || 5000)
 app.use(require("./Routes/opinions"))
 app.use(require("./Routes/users"))
 app.use(require("./Routes/register"))
 
 
-app.get('/HOME' , (req , res) =>{
+app.get('/' , (req , res) =>{
     res.send('WELCOME :)'+ '\n Ve a register "/Register" para continuar')
+})
+app.listen(app.get('port'), ()=>{
+    console.log('Server running on port', app.get('port'))
 })
