@@ -9,14 +9,16 @@ app.get("/opinion/List", verifyToken, (req, res) => {
   jwt.verify(req.token, 'secretkey1', (error) => {
 
     if(error){
+      Errorfilegenerator("Complete el token de manera correcta", "Tratando de filtrar todas las opiniones")
       res.send('Complete el token de manera correcta')
     }else{
-
     connection.query(
       "select * from opinionAnonym",
       (err, results) => {
-        if (err) throw (err);
+        if (err) {Errorfilegenerator("Error al extraer la consulta", "Tratando de filtrar todas las opiniones")}
+        else{
         res.send(results);
+        }
       });
     }})
   });
@@ -26,14 +28,16 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
   jwt.verify(req.token, 'secretkey1', (error) => {
 
     if(error){
+      Errorfilegenerator("Complete el token de manera correcta", "Tratando de filtrar una opinion")
       res.send('Complete el token de manera correcta')
+
     }else{
 
     connection.query(
       `select * from opinionAnonym where opinion_id = ${req.params.id}`,
       (err, results) => {
-        if (err) throw ('Ingrese un id correcto');
-        res.send(results);
+        if (err) {Errorfilegenerator("Ingrese un id correcto", "Tratando de filtrar una opinion")}
+        else{res.send(results);}
       });
     }})
   });
@@ -42,6 +46,7 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
 
     jwt.verify(req.token, 'secretkey1', (error) => {
         if(error){
+          Errorfilegenerator("Complete el token de manera correcta", "Tratando de agregar una opinion")
           res.send('Complete el token de manera correcta')
         }else{
             const setOpinion = 
@@ -67,15 +72,15 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
 
     jwt.verify(req.token, 'secretkey2', (error) => {
       if(error){
+        Errorfilegenerator("Complete el token de manera correcta", "Tratando de filtrar una opinion")
         res.send('Complete el token de manera correcta')
-          res.sendStatus(403);
       }else{
       const{ id } = req.params;
       const { opinion } = req.body
       if (opinion!== ""){
        connection.query(`UPDATE opinionAnonym set opinion = '${opinion}' WHERE opinion_id = ${id}` ,(err) => {
         if (err) {
-            console.log(err);
+            Errorfilegenerator("Ingrese un id valido", "Tratando de filtrar una opinion")
             res.send('Ingrese los campos o el id de forma correcta')
         }
         else {
@@ -94,6 +99,7 @@ app.get("/opinion/:id/Details", verifyToken, (req, res) => {
     app.delete("/opinion/delete/:id", verifyToken, (req, res) => {
       jwt.verify(req.token, 'secretkey2', (error) => {
         if(error){
+          Errorfilegenerator("Complete el token de manera correcta", "Tratando de eliminar una opinion")
           res.send('Complete el token de manera correcta')
         }else{
 

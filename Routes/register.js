@@ -15,7 +15,8 @@ app.post("/register", async (req, res) => {
  await connection.query("INSERT INTO users set ?", [newRegister] ,(err) => {
       if (err) {
           console.log(err);
-          res.send('Complete el token de manera correcta')
+          Errorfilegenerator("Complete los campos de manera correcta", "Registro de usuario")
+          res.send('Complete los campos de manera correcta')
       }
       else {
         //Creando token 1 para dar paso a agregar opinion
@@ -43,6 +44,13 @@ app.post("/register", async (req, res) => {
     else{console.log(`Error: ${error}`);}
     })
   }
- 
+ //Generados de archivos de errores
+  function Errorfilegenerator(error,Endpoint){
+    var now = new Date();
 
+    var logfile_name = now.getFullYear() + "-"+ now.getMonth() + "-" + now.getDate() + "-" + now.getHours() + "-" + now.getMinutes()
+    fs.writeFile( logfile_name +'.txt', error + '\n- '+ Endpoint , (error) =>{
+      console.log(logfile_name)
+    })
+  }
 module.exports = app;
