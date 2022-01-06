@@ -12,4 +12,4 @@ Luego, debe ejecutar ambos lados de la aplicación web, el backend tiene dos for
 
 Comando del modo de desarrollo: `npm run dev` o `yarn run dev`.
 
-Comando de modo normal: `npm start `o `yarn start`.
+Comando de modo normal: `npm start` o `yarn start`.
