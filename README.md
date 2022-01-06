@@ -6,10 +6,10 @@ Esto nació como un proyecto de pasantía para una Práctica de la misma, hecho 
 
 En primer lugar, debe instalar las dependencias del backend, puede hacer esto con:
 
-npm install o yarn install
+`npm install` o `yarn install`
 
-Luego, debe ejecutar ambos lados de la aplicación web, el backend tiene dos formas de ejecutarse, npm run dev or yarn run dev..
+Luego, debe ejecutar ambos lados de la aplicación web, el backend tiene dos formas de ejecutarse, `npm run dev` or `yarn run dev`..
 
-Comando del modo de desarrollo: npm run dev o yarn run dev.
+Comando del modo de desarrollo: `npm run dev` o `yarn run dev`.
 
-Comando de modo normal: npm startor yarn start.
+Comando de modo normal: `npm start `or `yarn start`.
